@@ -17,7 +17,7 @@ My intentions for creating this table UI component were:
 
 ## Visual effect of usage this solution with RayLib
 
-[Visual effect of usage this solution with RayLib](example/raylib_table_ui___example__demo_tables.png)
+![Visual effect of usage this solution with RayLib](example/raylib_table_ui___example__demo_tables.png)
 
 
 ## How to use as C developer
