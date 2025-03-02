@@ -151,10 +151,13 @@ You can use my RayLib's table UI from this point :-)
 
 
 ## TODO list
-[_] - recive feedback after first release from Open Source
-[_] - add unit tests + code coverage
-[_] - do precise memory leaks debugging
-[_] - promotion of library in Open Source world i.e. for RayLib's deelopers (game dev, indie games companies, UI for C entusiasts, desktopo apps, etc.)
+- [x] first release with demo/example
+- [x] add required documentation
+- [ ] put message on socials
+- [ ] recive feedback after first release from Open Source
+- [ ] add unit tests + code coverage
+- [ ] do precise memory leaks debugging
+- [ ] promotion of library in Open Source world i.e. for RayLib's deelopers (game dev, indie games companies, UI for C entusiasts, desktopo apps, etc.)
 
 
 ## Collaboriation is welcome
