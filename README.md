@@ -136,12 +136,13 @@ void OnRowClickCallback(int tableId, int row, const char *columnName) {
 
 ```
 
-## How can I use this table UI component in with private codebase
-It's very simple for C dev.! 
+## How can I use this table UI component with my private codebase?
+There are multiple ways, but let's my exmplain more simple way here. 
 
-You need to have two dirs (`include`, `libs`) after `make` process inside this repo.
+1. You need to have two dirs (`include`, `libs`) after `make` process inside this repo.
+There are include header file and compiled library (*.a and *.o) required to linking with your code.
 
-Add required resources inside you compilation process i.e.:
+2. Add required resources inside you compilation process i.e.:
 ```bash
 $ gcc -o my_project.out my_project.c -Iinclude/ -llib/ -lraylib -lm
 ```
