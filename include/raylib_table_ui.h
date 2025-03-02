@@ -51,4 +51,16 @@ typedef struct {
     void (*OnRowClickCallback)(int tableId, int row, const char *columnName);
 } Table;
 
+
+void DrawTable(Table *table);
+void UpdateTableScroll(Table *table, float delta);
+void HandleScrollbar(Table *table);
+void HighlightRow(Table *table);
+void HandleRowClick(Table *table);
+void OnRowClickCallback(int tableId, int row, const char *columnName);
+bool IsMouseOverTable(Table *table);
+
+TableRow* CreateTableRows(int numRows, int numCols);
+void DisposeTableRows(int numRows, TableRow* rows);
+
 #endif /* RAYLIB_TABLE_UI_H */
