@@ -12,12 +12,20 @@ My intentions for creating this table UI component were:
 - callback function per table, for detecting clicks on cells and return row+column location and table id.
 - scrool bar on left side (you can use mouse to review data rows inside table)
 - proportional (percentage) definition of colums sizes (without counting pixels needs!)
+- easy dark mode support
+- custom color schemas support
 - software engineer wih ANSI C knowledge (on junior level) could reuse this solution (without any problems).
 
 
 ## Visual effect of usage this solution with RayLib
 
+### Normal mode
+
 ![Visual effect of usage this solution with RayLib](example/raylib_table_ui___example__demo_tables.png)
+
+### Dark mode
+
+![Visual effect of usage this solution with RayLib with dark mode](example/raylib_table_ui___example__demo_tables__dark_mode.png)
 
 
 ## How to use as C developer
@@ -84,6 +92,9 @@ void OnRowClickCallback(int tableId, int row, const char *columnName) {
 }
 
 ...
+    const int darkMode = false;
+
+    TableColors tblColors = GetTableDefaultColorsScheme(darkMode);
 
     // Define column names for Table 1
     const char *columnNames1[] = {"Icon", "Text", "Number", "Value"};
@@ -121,10 +132,15 @@ void OnRowClickCallback(int tableId, int row, const char *columnName) {
         HandleRowClick(&table1);
 
         BeginDrawing();
-        ClearBackground(RAYWHITE);
 
+        if (darkMode == true) { 
+            ClearBackground(BLACK);
+        } else {
+            ClearBackground(RAYWHITE);
+        }
+        
         // Draw the tables
-        DrawTable(&table1);
+        DrawTable(&table1, tblColors);
 
         EndDrawing();
     }

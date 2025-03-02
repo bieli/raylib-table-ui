@@ -52,7 +52,24 @@ typedef struct {
 } Table;
 
 
-void DrawTable(Table *table);
+typedef struct {
+  Color tableBgColor;
+  Color headerBgColor;
+  Color headerTextColor;
+  Color headerDivLinesColor;
+  Color rowColor;
+  Color tableRowDivLinesColor;
+  Color highlightRowColor;
+  Color cellTextTypeColor;
+  Color cellNumberTypeColor;
+  Color cellDoubleTypeColor;
+  Color cellCheckboxTypeColor;
+  Color scrollbarColor;
+} TableColors;
+
+
+void DrawTable(Table *table, TableColors tblColors);
+TableColors GetTableDefaultColorsScheme(bool inverse);
 void UpdateTableScroll(Table *table, float delta);
 void HandleScrollbar(Table *table);
 void HighlightRow(Table *table);

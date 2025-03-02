@@ -12,8 +12,11 @@ void OnRowClickCallback(int tableId, int row, const char *columnName) {
 int main(void) {
     const int screenWidth = 1200;
     const int screenHeight = 800;
+    const int darkMode = true;
 
     InitWindow(screenWidth, screenHeight, "Table Visual Component for RAYLIB");
+
+    TableColors tblColors = GetTableDefaultColorsScheme(darkMode);
 
     // Define column names for Table 1
     const char *columnNames1[] = {"Icon", "Text", "Number", "Value"};
@@ -87,11 +90,17 @@ int main(void) {
         HandleRowClick(&table2);
 
         BeginDrawing();
-        ClearBackground(RAYWHITE);
+
+        if (darkMode == true) { 
+            ClearBackground(BLACK);
+        } else {
+            ClearBackground(RAYWHITE);
+        }
+
 
         // Draw the tables
-        DrawTable(&table1);
-        DrawTable(&table2);
+        DrawTable(&table1, tblColors);
+        DrawTable(&table2, tblColors);
 
         EndDrawing();
     }

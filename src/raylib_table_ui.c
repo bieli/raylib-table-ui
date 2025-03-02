@@ -5,7 +5,7 @@
 #include "raylib_table_ui.h"
 
 
-void DrawTable(Table *table) {
+void DrawTable(Table *table, TableColors tblColors) {
     // Offset for header
     float y = table->positionY - table->scrollOffset + table->rowHeight;
     float x = table->positionX;
@@ -13,15 +13,15 @@ void DrawTable(Table *table) {
     float h = table->height;
 
     // Draw table rectangle
-    DrawRectangleLines(x, table->positionY, w, h, DARKGRAY);
+    DrawRectangleLines(x, table->positionY, w, h, tblColors.tableBgColor);
 
     // Draw header
-    DrawRectangle(x, table->positionY, w, table->rowHeight, DARKGRAY);
+    DrawRectangle(x, table->positionY, w, table->rowHeight, tblColors.headerBgColor);
     float colX = x;
     for (int j = 0; j < table->rows[0].numCells; j++) {
         float colWidth = table->colWidths[j] * w;
-        DrawText(table->columnNames[j], colX + 10, table->positionY + 10 - 5, 20, RAYWHITE);
-        DrawRectangleLines(colX, table->positionY, colWidth, table->rowHeight, GRAY);
+        DrawText(table->columnNames[j], colX + 10, table->positionY + 10 - 5, 20, tblColors.headerTextColor);
+        DrawRectangleLines(colX, table->positionY, colWidth, table->rowHeight, tblColors.headerDivLinesColor);
         colX += colWidth;
     }
 
@@ -29,11 +29,11 @@ void DrawTable(Table *table) {
     for (int i = 0; i < table->numRows; i++) {
         float rowTop = y + i * table->rowHeight;
         if (rowTop >= table->positionY + table->rowHeight && rowTop <= table->positionY + h) {
-            Color rowColor = LIGHTGRAY;
+            Color rowColor = tblColors.rowColor;
 
             // Highlight row if mouse is over it
             if (table->highlightedRow == i) {
-                rowColor = Fade(LIGHTGRAY, 0.3f);
+                rowColor = Fade(tblColors.highlightRowColor, 0.3f);
             }
 
             DrawRectangle(x, rowTop, w, table->rowHeight, rowColor);
@@ -49,32 +49,32 @@ void DrawTable(Table *table) {
                         break;
                     }
                     case CELL_TYPE_TEXT: {
-                        DrawText(table->rows[i].cells[j].text, colX + 10, rowTop + 10 - 5, 20, BLACK);
+                        DrawText(table->rows[i].cells[j].text, colX + 10, rowTop + 10 - 5, 20, tblColors.cellTextTypeColor);
                         break;
                     }
                     case CELL_TYPE_NUMBER: {
                         char numberText[32];
                         snprintf(numberText, sizeof(numberText), "%d", table->rows[i].cells[j].number);
-                        DrawText(numberText, colX + 10, rowTop + 10 - 5, 20, BLACK);
+                        DrawText(numberText, colX + 10, rowTop + 10 - 5, 20, tblColors.cellNumberTypeColor);
                         break;
                     }
                     case CELL_TYPE_DOUBLE: {
                         char valueText[32];
                         snprintf(valueText, sizeof(valueText), "%.2f", table->rows[i].cells[j].value);
-                        DrawText(valueText, colX + 10, rowTop + 10 - 5, 20, BLACK);
+                        DrawText(valueText, colX + 10, rowTop + 10 - 5, 20, tblColors.cellDoubleTypeColor);
                         break;
                     }
                     case CELL_TYPE_CHECKBOX: {
                         if (table->rows[i].cells[j].checkbox) {
-                            DrawText("[X]", colX + 10, rowTop + 10 - 5, 20, BLACK);
+                            DrawText("[X]", colX + 10, rowTop + 10 - 5, 20, tblColors.cellCheckboxTypeColor);
                         } else {
-                            DrawText("[_]", colX + 10, rowTop + 10 - 5, 20, BLACK);
+                            DrawText("[_]", colX + 10, rowTop + 10 - 5, 20, tblColors.cellCheckboxTypeColor);
                         }
                         break;
                     }
                 }
 
-                DrawRectangleLines(colX, rowTop, colWidth, table->rowHeight, GRAY);
+                DrawRectangleLines(colX, rowTop, colWidth, table->rowHeight, tblColors.tableRowDivLinesColor);
                 colX += colWidth;
             }
         }
@@ -84,8 +84,27 @@ void DrawTable(Table *table) {
     if (table->numRows > table->visibleRows) {
         float scrollHeight = h * (float)table->visibleRows / (float)table->numRows;
         float scrollY = table->positionY + table->scrollOffset / (table->numRows * table->rowHeight) * h;
-        DrawRectangle(x + w + 2, scrollY, 10, scrollHeight, DARKGRAY);
+        DrawRectangle(x + w + 2, scrollY, 10, scrollHeight, tblColors.scrollbarColor);
     }
+}
+
+TableColors GetTableDefaultColorsScheme(bool inverse) {
+    TableColors tblColors;
+
+    tblColors.tableBgColor = inverse ? LIGHTGRAY : DARKGRAY;
+    tblColors.headerBgColor = inverse ? LIGHTGRAY : DARKGRAY;
+    tblColors.headerTextColor = inverse ? BLACK : RAYWHITE;
+    tblColors.headerDivLinesColor = inverse ? DARKGRAY : GRAY;
+    tblColors.rowColor = inverse ? DARKGRAY : LIGHTGRAY;
+    tblColors.tableRowDivLinesColor = inverse ? LIGHTGRAY : GRAY;
+    tblColors.highlightRowColor = inverse ? DARKGRAY : LIGHTGRAY;
+    tblColors.cellTextTypeColor = inverse ? RAYWHITE : BLACK;
+    tblColors.cellNumberTypeColor = inverse ? RAYWHITE : BLACK;
+    tblColors.cellDoubleTypeColor = inverse ? RAYWHITE : BLACK;
+    tblColors.cellCheckboxTypeColor = inverse ? RAYWHITE : BLACK;
+    tblColors.scrollbarColor = inverse ? LIGHTGRAY : DARKGRAY;
+
+    return tblColors;
 }
 
 void UpdateTableScroll(Table *table, float delta) {
