@@ -136,6 +136,17 @@ void OnRowClickCallback(int tableId, int row, const char *columnName) {
 
 ```
 
+## How can I use this table UI component in with private codebase
+It's very simple for C dev.! 
+
+You need to have two dirs (`include`, `libs`) after `make` process inside this repo.
+
+Add required resources inside you compilation process i.e.:
+```bash
+$ gcc -o my_project.out my_project.c -Iinclude/ -llib/ -lraylib -lm
+```
+That's it!
+You can use my RayLib's table UI from this point :-)
 
 ## Collaboriation is welcome
 
