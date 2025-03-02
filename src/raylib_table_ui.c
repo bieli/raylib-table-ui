@@ -29,13 +29,15 @@ printf("\t\t table->columnDefinitions[%d]->columnName: %s\n", j, table->columnDe
         DrawRectangleLines(colX, table->positionY, colWidth, table->rowHeight, tblColors.headerDivLinesColor);
         colX += colWidth;
     }
-
+printf("\t\t DrawTable START 55\n");
     // Draw rows
     for (int i = 0; i < table->numRows; i++) {
+printf("\t\t DrawTable START 66 - table->numRows: %d\n", table->numRows);
         float rowTop = y + i * table->rowHeight;
+printf("\t\t DrawTable START 77\n");
         if (rowTop >= table->positionY + table->rowHeight && rowTop <= table->positionY + h) {
             Color rowColor = tblColors.rowColor;
-
+printf("\t\t DrawTable START 88\n");
             // Highlight row if mouse is over it
             if (table->highlightedRow == i) {
                 rowColor = Fade(tblColors.highlightRowColor, 0.3f);
@@ -209,17 +211,58 @@ bool IsMouseOverTable(Table *table) {
            mouseY >= table->positionY && mouseY <= table->positionY + table->height;
 }
 
-ColumnDefinition **CreateTableWithHeader(int numCols) {
+ColumnDefinition **CreateTableHeader(int numCols) {
     ColumnDefinition **columnDefinitions = malloc(numCols * sizeof(ColumnDefinition));
     return columnDefinitions;
 }
 
-void AddColumnToTableHeaderColumn(Table *table, ColumnDefinition **columnDefinitions, int columnId, char *columnName, CellType columnType, float columnWidthsPercentage) {
+
+Table CreateTable(
+    int id,
+    float positionX,
+    float positionY,
+    float width,
+    float height,
+    int numRows,
+    int numCells,
+    float rowHeight,
+    TableRow *rows,
+    float scrollOffset,
+    int visibleRows,
+    ColumnDefinition **columnDefinitions,
+    bool isDragging,
+    float dragOffsetY,
+    int highlightedRow,
+    void *callback
+) {
+  Table table = {
+        id,
+        positionX,
+        positionY,
+        width,
+        height,
+        numRows,
+        numCells,
+        rowHeight,
+        rows,
+        scrollOffset,
+        visibleRows,
+        columnDefinitions,
+        isDragging,
+        dragOffsetY,
+        highlightedRow,
+        callback,
+        0
+    };
+    return table;
+}
+
+void AddColumnToTableHeaderColumn(Table *table, ColumnDefinition **columnDefinitions, char *columnName, CellType columnType, float columnWidthsPercentage) {
     ColumnDefinition *cd = malloc(sizeof(ColumnDefinition));
     strncpy(cd->columnName, columnName, sizeof(columnName));
     cd->columnType = columnType;
     cd->columnWidthsPercentage = columnWidthsPercentage;
-    columnDefinitions[columnId] = cd;
+    columnDefinitions[table->numCollsCnt++] = cd;
 }
 
 TableRow *CreateTableRows(ColumnDefinition** columnDefinition, int numCols, int numRows) {

@@ -63,6 +63,7 @@ typedef struct {
     float dragOffsetY;
     int highlightedRow;
     void (*OnRowClickCallback)(int tableId, int row, const char *columnName);
+    int numCollsCnt;
 } Table;
 
 
@@ -95,8 +96,26 @@ void HandleRowClick(Table *table);
 void OnRowClickCallback(int tableId, int row, const char *columnName);
 bool IsMouseOverTable(Table *table);
 
-ColumnDefinition **CreateTableWithHeader(int numCols);
-void AddColumnToTableHeaderColumn(Table *table, ColumnDefinition **columnDefinitions, int columnId, char *columnName, CellType columnType, float columnWidthsPercentage);
+Table CreateTable(
+    int id,
+    float positionX,
+    float positionY,
+    float width,
+    float height,
+    int numRows,
+    int numCells,
+    float rowHeight,
+    TableRow *rows,
+    float scrollOffset,
+    int visibleRows,
+    ColumnDefinition **columnDefinitions,
+    bool isDragging,
+    float dragOffsetY,
+    int highlightedRow,
+    void *callback
+);
+ColumnDefinition **CreateTableHeader(int numCols);
+void AddColumnToTableHeaderColumn(Table *table, ColumnDefinition **columnDefinitions, char *columnName, CellType columnType, float columnWidthsPercentage);
 TableRow *CreateTableRows(ColumnDefinition** columnDefinition, int numCols, int numRows);
 void GenerateTableRows(TableRow* rows, int numRows, int numCols, ColumnDefinition **columnDefinitions);
 
