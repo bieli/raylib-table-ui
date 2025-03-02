@@ -64,6 +64,7 @@ We have a few simple data structures:
 - `CELL_TYPE_NUMBER` - you can put any numeric value inside cell
 - `CELL_TYPE_DOUBLE` - you can put any double/float value inside cell
 - `CELL_TYPE_CHECKBOX` - you can put simple checkbox text representation with two state (enabled, disabled) inside cell
+- `CELL_TYPE_ACTIONS` - you can set a few buttons-like internal visual components to solve actions per row `(PROTOTYPE ONLY - NEEDS IMPLEMENTAION FOR CALLBACK WHEN CLICKED ON ACTION!)`
 
 ##### Cell struct
 `Cell` struct defines `CellType` and union with dedicated property for selected cell.

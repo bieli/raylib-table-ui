@@ -5,16 +5,26 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define  ACTION_MAX_CHARS         16
+#define  ACTION_MAX_PER_ROW       4
+#define  TABLE_MAX_COLUMNS_COUNT  10
+
 typedef enum {
     CELL_TYPE_IMAGE,
     CELL_TYPE_TEXT,
     CELL_TYPE_NUMBER,
     CELL_TYPE_DOUBLE,
-    CELL_TYPE_CHECKBOX
+    CELL_TYPE_CHECKBOX,
+    CELL_TYPE_ACTIONS,
 } CellType;
 
 typedef struct {
+        char name[ACTION_MAX_CHARS];
+} ActionBtn;
+
+typedef struct {
     CellType type;
+    int actionsBtnsCount;
     union {
         Texture2D icon;
         const char *iconPath;  // For CELL_TYPE_IMAGE
@@ -22,13 +32,19 @@ typedef struct {
         int number;            // For CELL_TYPE_NUMBER
         double value;          // For CELL_TYPE_DOUBLE
         bool checkbox;         // For CELL_TYPE_CHECKBOX
+        ActionBtn actionsBtns[ACTION_MAX_PER_ROW];         // For CELL_TYPE_ACTIONS
     };
 } Cell;
 
 typedef struct {
     Cell *cells;
-    int numCells;
 } TableRow;
+
+typedef struct {
+        char columnName[ACTION_MAX_CHARS];
+        CellType columnType;
+        float columnWidthsPercentage;
+} ColumnDefinition;
 
 typedef struct {
     int id;
@@ -37,14 +53,12 @@ typedef struct {
     float width;
     float height;
     int numRows;
-    float rowHeight;    
-    // Percentages
-    float *colWidths;
-
+    int numCells;
+    float rowHeight;
     TableRow *rows;
     float scrollOffset;
     int visibleRows;
-    const char **columnNames;
+    ColumnDefinition **columnDefinitions;
     bool isDragging;
     float dragOffsetY;
     int highlightedRow;
@@ -64,6 +78,10 @@ typedef struct {
   Color cellNumberTypeColor;
   Color cellDoubleTypeColor;
   Color cellCheckboxTypeColor;
+  Color cellActionTypeColorBtnBg;
+  Color cellActionTypeColorBtnFg;
+  Color cellActionTypeColorBtnText;
+
   Color scrollbarColor;
 } TableColors;
 
@@ -77,7 +95,12 @@ void HandleRowClick(Table *table);
 void OnRowClickCallback(int tableId, int row, const char *columnName);
 bool IsMouseOverTable(Table *table);
 
-TableRow* CreateTableRows(int numRows, int numCols);
+ColumnDefinition **CreateTableWithHeader(int numCols);
+void AddColumnToTableHeaderColumn(Table *table, ColumnDefinition **columnDefinitions, int columnId, char *columnName, CellType columnType, float columnWidthsPercentage);
+TableRow *CreateTableRows(ColumnDefinition** columnDefinition, int numCols, int numRows);
+void GenerateTableRows(TableRow* rows, int numRows, int numCols, ColumnDefinition **columnDefinitions);
+
 void DisposeTableRows(int numRows, TableRow* rows);
+void DisposeTableColumnDefinitions(int numCols, ColumnDefinition **columnDefinitions);
 
 #endif /* RAYLIB_TABLE_UI_H */

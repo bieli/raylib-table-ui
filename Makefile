@@ -29,7 +29,7 @@ $(BUILD_DIR)/$(OUTPUT):		$(OBJS)
 
 $(BUILD_DIR)/%.o:		$(SRC_DIR)/%.c
 				@echo "Compiling "$<
-				@$(CC) $(CFLAGS) $(INC_PATH) -c $< -o $@
+				@$(CC) -g $(CFLAGS) $(INC_PATH) -c $< -o $@
 
 # Other stuff
 .PHONY:	setup test install clean leaks
@@ -47,7 +47,7 @@ test:
 examples:
 	@echo "Examples..."
 	$(foreach file, $(EXAMPLES), \
-	$(CC) $(CFLAGS) $(INC_PATH) $(LIBS_PATH) $(file) $(LIBS) -o $(basename $(file)); \
+	$(CC) $(CFLAGS) $(INC_PATH) $(LIBS_PATH) $(file) $(LIBS) -o $(basename $(file)) -g; \
 	cd $(EXAMPLE_DIR); \
 	./main )
 

@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "raylib.h"
 #include "raylib_table_ui.h"
@@ -12,59 +13,60 @@ void OnRowClickCallback(int tableId, int row, const char *columnName) {
 int main(void) {
     const int screenWidth = 1200;
     const int screenHeight = 800;
-    const int darkMode = true;
+    const int darkMode = false;
+    //const int darkMode = true;
 
     InitWindow(screenWidth, screenHeight, "Table Visual Component for RAYLIB");
 
     TableColors tblColors = GetTableDefaultColorsScheme(darkMode);
 
-    // Define column names for Table 1
-    const char *columnNames1[] = {"Icon", "Text", "Number", "Value"};
+    int numRows1 = 1;
+    int numCols1 = 5;
+  
+    ColumnDefinition **columnDefinitions1;
+    TableRow *rows1;
 
-    // Define column names for Table 2
-    const char *columnNames2[] = {"Text", "Number", "Value", "Chk"};
+    columnDefinitions1 = CreateTableWithHeader(numCols1);
+    rows1 = CreateTableRows(columnDefinitions1, numCols1, numRows1);
+    Table table1 = {1, 50, 50, 500, 600, numRows1, numCols1, 0.0f, rows1, 15, 0, columnDefinitions1, 0, -1, 0, OnRowClickCallback};
+
+    AddColumnToTableHeaderColumn(&table1, columnDefinitions1, 0, "Ic11", CELL_TYPE_IMAGE, 0.15f);
+    AddColumnToTableHeaderColumn(&table1, columnDefinitions1, 1, "Text", CELL_TYPE_TEXT, 0.20f);
+    AddColumnToTableHeaderColumn(&table1, columnDefinitions1, 2, "Number", CELL_TYPE_NUMBER, 0.20f);
+    AddColumnToTableHeaderColumn(&table1, columnDefinitions1, 3, "Value", CELL_TYPE_DOUBLE, 0.25f);
+    AddColumnToTableHeaderColumn(&table1, columnDefinitions1, 4, "Actions", CELL_TYPE_ACTIONS, 0.20f);
+
+printf("\n\n columnDefinitions1 END. \n\n");
 
     // Generate rows of data for Table 1
-    int numRows = 100;
-
-    TableRow *rows1 = CreateTableRows(
-      numRows,
-      (int) sizeof(columnNames1)/sizeof(columnNames1[0])
+    GenerateTableRows(
+      rows1,
+      numRows1,
+      numCols1,
+      columnDefinitions1
     );
 
-    //TableRow *rows2 = CreateTableRows(numRows);
-
-    // Generate rows of data for Table 2
-    TableRow *rows2 = malloc(numRows * sizeof(TableRow));
-    for (int i = 0; i < numRows; i++) {
-        rows2[i].numCells = (int) sizeof(columnNames2)/sizeof(columnNames2[0]);
-        rows2[i].cells = malloc(rows2[i].numCells * sizeof(Cell));
-
-        rows2[i].cells[0].type = CELL_TYPE_TEXT;
-        rows2[i].cells[0].text = malloc(32 * sizeof(char));
-        snprintf((char *)rows2[i].cells[0].text, 32, "More then data: %d", i + 1);
-
-        rows2[i].cells[1].type = CELL_TYPE_NUMBER;
-        rows2[i].cells[1].number = (i + 1) * 10;
-
-        rows2[i].cells[2].type = CELL_TYPE_DOUBLE;
-        rows2[i].cells[2].value = (i + 1) * 1.5;
-        
-        rows2[i].cells[3].type = CELL_TYPE_CHECKBOX;
-        rows2[i].cells[3].checkbox = i % 2;
-    }
-
-    // Define table 1 with sample data
+printf("\n\n TableRow *rows1 = CreateTableRows END. \n\n");
+/*
+    TableRow *rows2 = CreateTableRows(
+      numRows2,
+      numCols2,
+      columnDefinitions2
+    );
     
+printf("\n\n TableRow *rows2 = CreateTableRows END. \n\n");
+*/
+    // Define table 1 with sample data
+
     // Percentages column's definitions
-    float colWidths1[] = {0.15f, 0.35f, 0.25f, 0.25f};
-    Table table1 = {1, 50, 50, 500, 600, numRows, 30, colWidths1, rows1, 0, 15, columnNames1, false, 0, -1, OnRowClickCallback};
+    //float colWidths1[] = {0.15f, 0.20f, 0.20f, 0.25f, 0.20f};
+    //Table table1 = {1, 50, 50, 500, 600, numRows1, 30, rows1, 0, 15, columnDefinitions1, false, 0, -1, OnRowClickCallback};
 
     // Define table 2 with sample data
-    
+
     // Percentages column's definitions
-    float colWidths2[] = {0.45f, 0.2f, 0.2f, 0.15f};
-    Table table2 = {2, 600, 50, 500, 600, numRows, 30, colWidths2, rows2, 0, 15, columnNames2, false, 0, -1, OnRowClickCallback};
+//    float colWidths2[] = {0.45f, 0.2f, 0.2f, 0.15f};
+//    Table table2 = {2, 600, 50, 500, 600, numRows2, 30, colWidths2, rows2, 0, 15, columnDefinitions2, false, 0, -1, OnRowClickCallback};
 
     SetTargetFPS(60);
 
@@ -73,21 +75,21 @@ int main(void) {
         float delta = GetMouseWheelMove() * 30;
         if (IsMouseOverTable(&table1)) {
             UpdateTableScroll(&table1, delta);
-        } else if (IsMouseOverTable(&table2)) {
+        } /* else if (IsMouseOverTable(&table2)) {
             UpdateTableScroll(&table2, delta);
-        }
+        }*/
 
         // Handle scrollbar dragging
         HandleScrollbar(&table1);
-        HandleScrollbar(&table2);
+        //HandleScrollbar(&table2);
 
         // Highlight row under the mouse
         HighlightRow(&table1);
-        HighlightRow(&table2);
+        //HighlightRow(&table2);
 
         // Handle row click
         HandleRowClick(&table1);
-        HandleRowClick(&table2);
+        //HandleRowClick(&table2);
 
         BeginDrawing();
 
@@ -97,29 +99,18 @@ int main(void) {
             ClearBackground(RAYWHITE);
         }
 
-
         // Draw the tables
         DrawTable(&table1, tblColors);
-        DrawTable(&table2, tblColors);
+        //DrawTable(&table2, tblColors);
 
         EndDrawing();
     }
 
-    DisposeTableRows(numRows, rows1);
+    //DisposeTableRows(numRows2, rows2);
+    //DisposeTableColumnDefinitions(numCols2, columnDefinitions2);
 
-//    DisposeTableRows(numRows, rows2);
-
-    for (int i = 0; i < numRows; i++) {
-        if (rows2[i].cells[0].text != NULL) {
-          free((char *)rows2[i].cells[0].text);  // Free allocated text memory
-        }
-        if (rows2[i].cells != NULL) {
-          free(rows2[i].cells);
-        }
-    }
-    if (rows2 != NULL) {
-      free(rows2);
-    }
+    DisposeTableRows(numRows1, rows1);
+    DisposeTableColumnDefinitions(numCols1, columnDefinitions1);
 
     CloseWindow();
 
