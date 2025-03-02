@@ -66,6 +66,7 @@ We have a few simple data structures:
 
 ##### Table struct
 `Table` struct. is main container for `TableRow` structs definitions and headers and callbacks.
+Of course position on screen and dimensions are inside.
 
 ##### Table struct callbacks
 - `void (*OnRowClickCallback)(int tableId, int row, const char *columnName);` - you can do something, when you click on table cells (in parameter, you can find row and column id and table id - there is possibliti to have multiple tables on one screen)
