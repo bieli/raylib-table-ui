@@ -50,12 +50,12 @@ You can find header file here: [include/raylib_table_ui.h](include/raylib_table_
 
 We have a few simple data structures:
 ##### CellType struct
-`CellType` struct. is definition, what will be inside cell in table. Possible options are:
-- CELL_TYPE_IMAGE - you can use images as icons inside cell
-- CELL_TYPE_TEXT - you can put any text message inside cell
-- CELL_TYPE_NUMBER - you can put any numeric value inside cell
-- CELL_TYPE_DOUBLE - you can put any double/float value inside cell
-- CELL_TYPE_CHECKBOX - you can put simple checkbox text representation with two state (enabled, disabled) inside cell
+`CellType` enum. definitions, what will be inside cell in table. Possible options are:
+- `CELL_TYPE_IMAGE` - you can use images as icons inside cell
+- `CELL_TYPE_TEXT` - you can put any text message inside cell
+- `CELL_TYPE_NUMBER` - you can put any numeric value inside cell
+- `CELL_TYPE_DOUBLE` - you can put any double/float value inside cell
+- `CELL_TYPE_CHECKBOX` - you can put simple checkbox text representation with two state (enabled, disabled) inside cell
 
 ##### Cell struct
 `Cell` struct defines `CellType` and union with dedicated property for selected cell.
