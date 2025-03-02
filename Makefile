@@ -3,6 +3,7 @@ BUILD_DIR		:=	lib
 SRC_DIR			:=	src
 INCLUDE_DIR		:=	include
 TEST_DIR		:=	test
+EXAMPLE_DIR		:=	example
 
 OUTPUT			:=	libraylibtableui.a
 
@@ -12,12 +13,13 @@ INC_PATH		:=	-I $(INCLUDE_DIR)
 LIBS_PATH		:=	-L $(BUILD_DIR)
 INSTALL_PATH_LIB	:=	/usr/local/lib
 INSTALL_PATH_INC	:=	/usr/local/include
-LIBS			:=	-l:$(OUTPUT) -lm -lcheck -pthread -lrt
+LIBS			:=	-l:$(OUTPUT) -lm -lraylib
 
 # Files
 SRCS			:=	$(wildcard $(SRC_DIR)/*.c)
 OBJS			:=	$(patsubst $(SRC_DIR)/%.c, $(BUILD_DIR)/%.o, $(SRCS))
 TESTS			:=	$(wildcard $(TEST_DIR)/*.c)
+EXAMPLES			:=	$(wildcard $(EXAMPLE_DIR)/*.c)
 INCLUDES		:=	$(wildcard $(INCLUDE_DIR)/*.h)
 
 # Library
@@ -41,6 +43,13 @@ test:
 	@$(foreach file, $(TESTS), \
 	$(CC) $(CFLAGS) $(INC_PATH) $(LIBS_PATH) $(file) $(LIBS) -o $(basename $(file)); \
 	./$(basename $(file)) )
+
+examples:
+	@echo "Examples..."
+	$(foreach file, $(EXAMPLES), \
+	$(CC) $(CFLAGS) $(INC_PATH) $(LIBS_PATH) $(file) $(LIBS) -o $(basename $(file)); \
+	cd $(EXAMPLE_DIR); \
+	./main )
 
 install:
 	@echo "Installing..."

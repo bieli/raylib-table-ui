@@ -45,7 +45,7 @@ void DrawTable(Table *table) {
 
                 switch (table->rows[i].cells[j].type) {
                     case CELL_TYPE_IMAGE: {
-                        DrawTexture(table->rows[i].cells[j].icon, colX + 0, rowTop + 10 - 5, WHITE);
+                        DrawTexture(table->rows[i].cells[j].icon, colX + 25, rowTop + 10 - 5, WHITE);
                         break;
                     }
                     case CELL_TYPE_TEXT: {
